@@ -72,6 +72,8 @@ defmodule TinkoffInvest do
     Application.get_env(:tinkoff_invest, :endpoint, @default_endpoint) <> endpoint_prefix()
   end
 
+  def default_endpoint, do: @default_endpoint
+
   @doc """
   Takes payload from response and returns it, useful for piping
   """

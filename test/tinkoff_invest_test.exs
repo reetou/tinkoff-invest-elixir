@@ -24,11 +24,11 @@ defmodule TinkoffInvestTest do
 
     test "Should change mode and endpoint url successfully" do
       assert :production = TinkoffInvest.mode()
-      assert TinkoffInvest.endpoint() == Application.fetch_env!(:tinkoff_invest, :endpoint)
+      assert TinkoffInvest.endpoint() == TinkoffInvest.default_endpoint()
       assert :ok = TinkoffInvest.set_mode(:sandbox)
       assert :sandbox = TinkoffInvest.mode()
-      assert TinkoffInvest.endpoint() != Application.fetch_env!(:tinkoff_invest, :endpoint)
-      assert TinkoffInvest.endpoint() =~ Application.fetch_env!(:tinkoff_invest, :endpoint)
+      assert TinkoffInvest.endpoint() != TinkoffInvest.default_endpoint()
+      assert TinkoffInvest.endpoint() =~ TinkoffInvest.default_endpoint()
     end
 
     test "Should get payload from response struct" do
