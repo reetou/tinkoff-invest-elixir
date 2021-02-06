@@ -1,4 +1,19 @@
 defmodule TinkoffInvest.Api do
+  @moduledoc """
+  This module provides two simple requests: GET and POST
+
+  `payload` map converted to query string on request 
+
+  You will need to define your custom `TinkoffInvest.Model` to make this work or use existing one.
+
+  Examples: 
+
+  ```
+  TinkoffInvest.Api.request("/orders", :get, YourCustomModel)
+  TinkoffInvest.Api.request("/orders", :get, YourCustomModel, %{someParam: true}) # /orders?someParam=true
+  TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{})
+  ```
+  """
   alias TinkoffInvest.Api.Request
   alias TinkoffInvest.Model.Api.Response
 

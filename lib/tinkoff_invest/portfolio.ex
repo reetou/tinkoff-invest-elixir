@@ -30,7 +30,7 @@ defmodule TinkoffInvest.Portfolio do
   @doc """
   Get full portfolio with currencies and positions
   """
-  @spec currencies() :: Response.t()
+  @spec full() :: Response.t()
   def full do
     %{payload: currencies} = currencies()
     %{payload: positions} = positions()
