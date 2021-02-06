@@ -279,6 +279,31 @@ defmodule TinkoffInvestTest.MarketTest do
                 "trackingId" => "12334",
                 "status" => "Ok",
                 "payload" => %{
+                  "code" => "MALFORMED_QUERY_PARAMETER",
+                  "message" => "Неверный формат поля 'from' в запросе"
+                },
+                "status_code" => 500
+              })
+    @expected %Response{
+      payload: %TinkoffInvest.Model.Api.Error{
+        code: "MALFORMED_QUERY_PARAMETER",
+        message: "Неверный формат поля 'from' в запросе"
+      },
+      tracking_id: "12334",
+      status: "Ok",
+      status_code: 500
+    }
+    http_mock "Get candles error" do
+      now = DateTime.utc_now()
+      from = now |> DateTime.add(-3600)
+      to = now
+      assert @expected == Market.candles("AAPL", from, to, "1min")
+    end
+
+    @response Response.new(%{
+                "trackingId" => "12334",
+                "status" => "Ok",
+                "payload" => %{
                   "figi" => "string",
                   "ticker" => "string",
                   "isin" => "string",

@@ -12,5 +12,6 @@ config :tinkoff_invest,
 - `:token` - Token you created on broker website
 - `:broker_account_id` - Your broker account id you created
 - `:endpoint` (optional) - You can set your custom endpoint if you're behind proxy/whatever
+- `:logs_enabled` (optional) - Whether to log API response to Logger.debug (FALSE by default)
 
 You can also change your token, broker account id, endpoint and mode programmatically, it will change immediately. See `TinkoffInvest` module for details.

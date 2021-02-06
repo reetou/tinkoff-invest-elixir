@@ -65,6 +65,24 @@ defmodule TinkoffInvest do
   end
 
   @doc """
+  Returns boolean indicating whether logs are enabled or not
+  """
+  @spec logs_enabled?() :: boolean()
+  def logs_enabled? do
+    Application.get_env(:tinkoff_invest, :logs_enabled, false)
+  end
+
+  @doc """
+  Enables or disables logging API response via `Logger.debug/1`
+
+  `false` by default
+  """
+  @spec toggle_logs(boolean()) :: :ok
+  def toggle_logs(val) when val in [true, false] do
+    Application.put_env(:tinkoff_invest, :logs_enabled, val)
+  end
+
+  @doc """
   Returns API endpoint for current mode
   """
   @spec endpoint :: String.t()

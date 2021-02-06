@@ -3,7 +3,7 @@ defmodule TinkoffInvest.TestMocks do
 
   defmacro http_mock(name, test) do
     mod = Request
-    opts = []
+    opts = [:passthrough]
     fun_name = Macro.escape(:"#{name}")
     caller = __CALLER__.module
 

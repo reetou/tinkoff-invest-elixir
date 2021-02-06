@@ -16,6 +16,7 @@ defmodule TinkoffInvest.Api do
   """
   alias TinkoffInvest.Api.Request
   alias TinkoffInvest.Model.Api.Response
+  alias TinkoffInvest.Model.Api.Error
 
   @internal_account_id_field :account_id
 
@@ -46,6 +47,10 @@ defmodule TinkoffInvest.Api do
     |> build_query(payload)
   end
 
+  def to_response(%HTTPoison.Response{status_code: status_code, body: body}) do
+    Response.new(Map.put(body, "status_code", status_code))
+  end
+
   defp get(path, module, payload) do
     path
     |> build_payload(payload)
@@ -62,9 +67,10 @@ defmodule TinkoffInvest.Api do
 
   defp handle_response({:ok, resp}, module), do: handle_response(resp, module)
 
-  defp handle_response(%Response{status_code: status_code} = data, _)
-       when status_code in [401, 404, 500] do
-    data
+  defp handle_response(%Response{payload: %{"code" => _} = error} = data, _) do
+    error
+    |> Error.new()
+    |> Response.payload(data)
   end
 
   defp handle_response(%Response{payload: payload} = data, module) do

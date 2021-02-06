@@ -1,7 +1,6 @@
 defmodule TinkoffInvestTest do
   use ExUnit.Case
   doctest TinkoffInvest
-  alias TinkoffInvest.Model.Api.Error
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Model
   import Mock
@@ -44,9 +43,18 @@ defmodule TinkoffInvestTest do
   end
 
   describe "User accounts" do
-    @response Response.new(%{"status_code" => 500, "payload" => Error.new(%{"message" => "123"})})
+    @response Response.new(%{
+                "status_code" => 500,
+                "payload" => %{
+                  "code" => nil,
+                  "message" => "123"
+                }
+              })
     @expected %Response{
-      payload: %TinkoffInvest.Model.Api.Error{code: nil, message: "123"},
+      payload: %TinkoffInvest.Model.Api.Error{
+        code: nil,
+        message: "123"
+      },
       status_code: 500,
       tracking_id: nil,
       status: nil
