@@ -5,6 +5,8 @@ defmodule TinkoffInvest do
 
   @type mode() :: :sandbox | :production
 
+  @default_endpoint "https://api-invest.tinkoff.ru/openapi"
+
   alias TinkoffInvest.Portfolio
   alias TinkoffInvest.User
   alias TinkoffInvest.Orders
@@ -67,7 +69,7 @@ defmodule TinkoffInvest do
   """
   @spec endpoint :: String.t()
   def endpoint do
-    Application.fetch_env!(:tinkoff_invest, :endpoint) <> endpoint_prefix()
+    Application.get_env(:tinkoff_invest, :endpoint, @default_endpoint) <> endpoint_prefix()
   end
 
   @doc """
