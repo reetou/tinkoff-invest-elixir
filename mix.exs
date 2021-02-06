@@ -14,6 +14,7 @@ defmodule TinkoffInvest.MixProject do
       deps: deps(),
       description: @description,
       source_url: @source_url,
+      package: package(),
       docs: [
         main: "TinkoffInvest",
         extras: ["README.md"]
