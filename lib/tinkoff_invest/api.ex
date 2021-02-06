@@ -18,8 +18,6 @@ defmodule TinkoffInvest.Api do
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Model.Api.Error
 
-  @internal_account_id_field :account_id
-
   @type method() :: :get | :post
 
   @doc """
@@ -84,37 +82,32 @@ defmodule TinkoffInvest.Api do
   defp build_query(path, payload) do
     payload
     |> maybe_overwrite_account_id()
-    |> Enum.reduce(["?"], fn x, acc ->
-      append =
-        case acc do
-          ["?"] -> ""
-          _ -> "&"
-        end
-
-      acc ++ List.wrap(append <> build_query_field(x))
-    end)
+    |> encode_query()
+    |> List.wrap()
+    |> List.insert_at(0, "?")
     |> List.insert_at(0, path)
     |> Enum.join()
   end
 
-  defp build_query_field({_, nil}), do: ""
-  defp build_query_field({@internal_account_id_field, _}), do: account_id_query()
-
-  defp build_query_field({field, %DateTime{} = datetime}) do
-    value = DateTime.to_iso8601(datetime)
-    "#{field}=#{value}"
+  defp encode_query(payload) do
+    payload
+    |> Enum.map(&build_query_field/1)
+    |> Map.new()
+    |> URI.encode_query()
   end
 
-  defp build_query_field({field, value}), do: "#{field}=#{value}"
+  defp build_query_field({field, %DateTime{} = datetime}) do
+    value = datetime |> DateTime.to_iso8601()
+    {field, value}
+  end
+
+  defp build_query_field(x), do: x
 
   defp maybe_overwrite_account_id(%{brokerAccountId: _} = payload), do: payload
 
   defp maybe_overwrite_account_id(payload) do
-    # Enable account id in payload
-    Map.put(payload, @internal_account_id_field, true)
+    Map.put(payload, :brokerAccountId, account_id())
   end
-
-  defp account_id_query, do: "brokerAccountId=#{account_id()}"
 
   defp account_id do
     Application.fetch_env!(:tinkoff_invest, :broker_account_id)
