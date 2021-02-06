@@ -17,20 +17,27 @@ defmodule TinkoffInvest.Api do
   alias TinkoffInvest.Api.Request
   alias TinkoffInvest.Model.Api.Response
 
+  @internal_account_id_field :account_id
+
   def request(path, method, module, payload \\ nil)
   def request(path, :get, module, payload), do: get(path, module, payload)
   def request(path, :post, module, payload), do: post(path, module, payload)
 
-  defp get(path, module, payload) do
+  def build_payload(path, payload) do
     path
     |> build_query(payload)
+  end
+
+  defp get(path, module, payload) do
+    path
+    |> build_payload(payload)
     |> Request.get()
     |> handle_response(module)
   end
 
   defp post(path, module, payload) do
     path
-    |> build_query(payload)
+    |> build_payload(payload)
     |> Request.post("")
     |> handle_response(module)
   end
@@ -52,22 +59,38 @@ defmodule TinkoffInvest.Api do
 
   defp build_query(path, payload) do
     payload
-    |> Enum.map(&build_query_field/1)
+    |> maybe_overwrite_account_id()
+    |> Enum.reduce(["?"], fn x, acc ->
+      append =
+        case acc do
+          ["?"] -> ""
+          _ -> "&"
+        end
+
+      acc ++ List.wrap(append <> build_query_field(x))
+    end)
     |> List.insert_at(0, path)
     |> Enum.join()
   end
 
   defp build_query_field({_, nil}), do: ""
-  defp build_query_field({:account_id, _}), do: account_id_query()
+  defp build_query_field({@internal_account_id_field, _}), do: account_id_query()
 
   defp build_query_field({field, %DateTime{} = datetime}) do
     value = DateTime.to_iso8601(datetime)
-    "&#{field}=#{value}"
+    "#{field}=#{value}"
   end
 
-  defp build_query_field({field, value}), do: "&#{field}=#{value}"
+  defp build_query_field({field, value}), do: "#{field}=#{value}"
 
-  defp account_id_query, do: "&brokerAccountId=#{account_id()}"
+  defp maybe_overwrite_account_id(%{brokerAccountId: _} = payload), do: payload
+
+  defp maybe_overwrite_account_id(payload) do
+    # Enable account id in payload
+    Map.put(payload, @internal_account_id_field, true)
+  end
+
+  defp account_id_query, do: "brokerAccountId=#{account_id()}"
 
   defp account_id do
     Application.fetch_env!(:tinkoff_invest, :broker_account_id)
