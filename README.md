@@ -41,5 +41,7 @@ TinkoffInvest.Market.stocks()
 end)
 ```
 
+See `TinkoffInvest` module for more details
+
 Documentation: [https://hexdocs.pm/tinkoff_invest](https://hexdocs.pm/tinkoff_invest).
 
