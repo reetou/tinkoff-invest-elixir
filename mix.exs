@@ -33,7 +33,7 @@ defmodule TinkoffInvest.MixProject do
             TinkoffInvest.Portfolio,
             TinkoffInvest.Sandbox,
             TinkoffInvest.User,
-            TinkoffInvest.Api,
+            TinkoffInvest.Api
           ]
         ]
       ]
@@ -63,7 +63,7 @@ defmodule TinkoffInvest.MixProject do
 
   defp groups_for_extras do
     [
-      "Introduction": ~r/guides\/introduction\/.?/
+      Introduction: ~r/guides\/introduction\/.?/
     ]
   end
 
