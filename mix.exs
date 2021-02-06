@@ -16,8 +16,26 @@ defmodule TinkoffInvest.MixProject do
       source_url: @source_url,
       package: package(),
       docs: [
-        main: "TinkoffInvest",
-        extras: ["README.md"]
+        main: "readme",
+        extras: [
+          "README.md",
+          "CHANGELOG.md",
+          "guides/introduction/Methods.md",
+          "guides/introduction/Configuration.md"
+        ],
+        extra_section: "GUIDES",
+        groups_for_extras: groups_for_extras(),
+        groups_for_modules: [
+          "Public API": [
+            TinkoffInvest,
+            TinkoffInvest.Orders,
+            TinkoffInvest.Operations,
+            TinkoffInvest.Portfolio,
+            TinkoffInvest.Sandbox,
+            TinkoffInvest.User,
+            TinkoffInvest.Api,
+          ]
+        ]
       ]
     ]
   end
@@ -40,6 +58,12 @@ defmodule TinkoffInvest.MixProject do
       {:typed_struct, "~> 0.2.1", runtime: false},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:mock, "~> 0.3.0", only: :test}
+    ]
+  end
+
+  defp groups_for_extras do
+    [
+      "Introduction": ~r/guides\/introduction\/.?/
     ]
   end
 
