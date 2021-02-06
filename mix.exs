@@ -1,6 +1,9 @@
 defmodule TinkoffInvest.MixProject do
   use Mix.Project
 
+  @description "Elixir SDK for TinkoffInvest REST API"
+  @source_url "https://github.com/reetou/tinkoff-invest-elixir"
+
   def project do
     [
       app: :tinkoff_invest,
@@ -9,8 +12,8 @@ defmodule TinkoffInvest.MixProject do
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
-      source_url: "https://github.com/reetou/tinkoff-invest-elixir",
-      homepage_url: "https://reetou.github.io/tinkoff-invest-elixir",
+      description: @description,
+      source_url: @source_url,
       docs: [
         main: "TinkoffInvest",
         extras: ["README.md"]
@@ -36,6 +39,17 @@ defmodule TinkoffInvest.MixProject do
       {:typed_struct, "~> 0.2.1", runtime: false},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:mock, "~> 0.3.0", only: :test}
+    ]
+  end
+
+  defp package do
+    [
+      maintainers: ["Vladimir Sinitsyn"],
+      licenses: ["MIT"],
+      links: %{
+        Changelog: @source_url <> "/blob/master/CHANGELOG.md",
+        GitHub: @source_url
+      }
     ]
   end
 end
