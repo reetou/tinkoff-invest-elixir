@@ -18,7 +18,6 @@ defmodule TinkoffInvestTest.MarketTest do
                       "figi" => "string",
                       "ticker" => "string",
                       "isin" => "string",
-                      "minPriceIncrement" => 0,
                       "lot" => 0,
                       "minQuantity" => 0,
                       "currency" => "RUB",
@@ -37,7 +36,7 @@ defmodule TinkoffInvestTest.MarketTest do
           name: "string",
           currency: "RUB",
           lot: 0,
-          min_price_increment: 0,
+          min_price_increment: nil,
           min_quantity: 0,
           ticker: "string",
           type: "Stock"
