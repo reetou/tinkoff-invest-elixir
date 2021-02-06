@@ -17,29 +17,28 @@ defmodule TinkoffInvest.Model.OrderBook do
     field(:asks, list(Ask.t()))
   end
 
-  def new(%{
-        "figi" => figi,
-        "tradeStatus" => trade_status,
-        "depth" => depth,
-        "minPriceIncrement" => min_price_increment,
-        "faceValue" => face_value,
-        "lastPrice" => last_price,
-        "closePrice" => close_price,
-        "limitUp" => limit_up,
-        "limitDown" => limit_down,
-        "bids" => bids,
-        "asks" => asks
-      }) do
+  def new(
+        %{
+          "figi" => figi,
+          "tradeStatus" => trade_status,
+          "depth" => depth,
+          "minPriceIncrement" => min_price_increment,
+          "lastPrice" => last_price,
+          "closePrice" => close_price,
+          "bids" => bids,
+          "asks" => asks
+        } = params
+      ) do
     %__MODULE__{
       figi: figi,
       trade_status: trade_status,
       depth: depth,
       min_price_increment: min_price_increment,
-      face_value: face_value,
+      face_value: Map.get(params, "faceValue"),
       last_price: last_price,
       close_price: close_price,
-      limit_up: limit_up,
-      limit_down: limit_down,
+      limit_up: Map.get(params, "limitUp"),
+      limit_down: Map.get(params, "limitDown"),
       bids: Bid.new(bids),
       asks: Ask.new(asks)
     }

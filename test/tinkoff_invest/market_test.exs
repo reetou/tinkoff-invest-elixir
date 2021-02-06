@@ -183,8 +183,6 @@ defmodule TinkoffInvestTest.MarketTest do
                 "trackingId" => "12334",
                 "status" => "Ok",
                 "payload" => %{
-                  "figi" => "string",
-                  "depth" => 0,
                   "bids" => [
                     %{
                       "price" => 0,
@@ -197,29 +195,38 @@ defmodule TinkoffInvestTest.MarketTest do
                       "quantity" => 0
                     }
                   ],
-                  "tradeStatus" => "NormalTrading",
-                  "minPriceIncrement" => 0,
-                  "faceValue" => 0,
-                  "lastPrice" => 0,
-                  "closePrice" => 0,
-                  "limitUp" => 0,
-                  "limitDown" => 0
+                  "closePrice" => 0.1083,
+                  "depth" => 20,
+                  "figi" => "TCS00A102EM7",
+                  "lastPrice" => 0.108,
+                  "minPriceIncrement" => 0.0001,
+                  "tradeStatus" => "NotAvailableForTrading"
                 },
                 "status_code" => 200
               })
     @expected %Response{
       payload: %Model.OrderBook{
-        asks: [%Model.OrderBook.Ask{price: 0, quantity: 0}],
-        bids: [%Model.OrderBook.Bid{price: 0, quantity: 0}],
-        close_price: 0,
-        depth: 0,
-        face_value: 0,
-        figi: "string",
-        last_price: 0,
-        limit_down: 0,
-        limit_up: 0,
-        min_price_increment: 0,
-        trade_status: "NormalTrading"
+        asks: [
+          %TinkoffInvest.Model.OrderBook.Ask{
+            price: 0,
+            quantity: 0
+          }
+        ],
+        bids: [
+          %TinkoffInvest.Model.OrderBook.Bid{
+            price: 0,
+            quantity: 0
+          }
+        ],
+        close_price: 0.1083,
+        depth: 20,
+        face_value: nil,
+        figi: "TCS00A102EM7",
+        last_price: 0.108,
+        limit_down: nil,
+        limit_up: nil,
+        min_price_increment: 0.0001,
+        trade_status: "NotAvailableForTrading"
       },
       tracking_id: "12334",
       status: "Ok",
