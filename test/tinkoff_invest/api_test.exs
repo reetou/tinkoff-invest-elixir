@@ -2,8 +2,18 @@ defmodule TinkoffInvestTest.ApiTest do
   use ExUnit.Case
   doctest TinkoffInvest
   alias TinkoffInvest.Api
+  alias TinkoffInvest.Model.Api.Response
 
   describe "Api" do
+    test "Handle response with nil body and return error payload" do
+      assert %Response{
+               tracking_id: nil,
+               status: nil,
+               status_code: 401,
+               payload: %{"code" => nil, "message" => nil}
+             } == Api.to_response(%HTTPoison.Response{status_code: 401, body: nil})
+    end
+
     test "Build request payload adds brokerAccountId query field" do
       path = "/orders"
       figi = "123"

@@ -45,6 +45,14 @@ defmodule TinkoffInvest.Api do
     |> build_query(payload)
   end
 
+  def to_response(%HTTPoison.Response{status_code: status_code, body: nil}) do
+    %{
+      "status_code" => status_code,
+      "payload" => %{"code" => nil, "message" => nil}
+    }
+    |> Response.new()
+  end
+
   def to_response(%HTTPoison.Response{status_code: status_code, body: body}) do
     Response.new(Map.put(body, "status_code", status_code))
   end
