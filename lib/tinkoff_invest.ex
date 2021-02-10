@@ -19,10 +19,10 @@ defmodule TinkoffInvest do
   defdelegate active_orders, to: Orders
 
   @doc delegate_to: {Orders, :create_limit_order, 1}
-  defdelegate create_limit_order(figi), to: Orders
+  defdelegate create_limit_order(figi, lots, operation, price), to: Orders
 
   @doc delegate_to: {Orders, :create_market_order, 1}
-  defdelegate create_market_order(figi), to: Orders
+  defdelegate create_market_order(figi, lots, operation), to: Orders
 
   @doc delegate_to: {Orders, :cancel_order, 1}
   defdelegate cancel_order(order_id), to: Orders

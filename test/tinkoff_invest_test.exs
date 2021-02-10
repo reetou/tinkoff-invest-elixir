@@ -160,18 +160,18 @@ defmodule TinkoffInvestTest do
                   "rejectReason" => "string",
                   "message" => "string",
                   "requestedLots" => 0,
-                  "executedLots" => 0,
+                  "executedLots" => 2,
                   "commission" => %{
                     "currency" => "RUB",
-                    "value" => 0
+                    "value" => 1
                   }
                 },
                 "status_code" => 200
               })
     @expected %Response{
       payload: %Model.LimitOrder{
-        commission: %{"currency" => "RUB", "value" => 0},
-        executed_lots: 0,
+        commission: %{"currency" => "RUB", "value" => 1},
+        executed_lots: 2,
         message: "string",
         operation: "Buy",
         order_id: "string",
@@ -184,7 +184,7 @@ defmodule TinkoffInvestTest do
       status_code: 200
     }
     http_mock "Create limit order" do
-      assert @expected == TinkoffInvest.create_limit_order("AAPL")
+      assert @expected == TinkoffInvest.create_limit_order("AAPL", 2, :buy, 2.00)
     end
 
     @response Response.new(%{
@@ -192,7 +192,7 @@ defmodule TinkoffInvestTest do
                 "status" => "Ok",
                 "payload" => %{
                   "orderId" => "string",
-                  "operation" => "Buy",
+                  "operation" => "Sell",
                   "status" => "New",
                   "rejectReason" => "string",
                   "message" => "string",
@@ -200,17 +200,17 @@ defmodule TinkoffInvestTest do
                   "executedLots" => 0,
                   "commission" => %{
                     "currency" => "RUB",
-                    "value" => 0
+                    "value" => 2
                   }
                 },
                 "status_code" => 200
               })
     @expected %Response{
       payload: %Model.MarketOrder{
-        commission: %{"currency" => "RUB", "value" => 0},
+        commission: %{"currency" => "RUB", "value" => 2},
         executed_lots: 0,
         message: "string",
-        operation: "Buy",
+        operation: "Sell",
         order_id: "string",
         reject_reason: "string",
         requested_lots: 0,
@@ -221,7 +221,7 @@ defmodule TinkoffInvestTest do
       status_code: 200
     }
     http_mock "Create market order" do
-      assert @expected == TinkoffInvest.create_market_order("AAPL")
+      assert @expected == TinkoffInvest.create_market_order("AAPL", 2, :sell)
     end
   end
 

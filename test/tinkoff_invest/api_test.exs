@@ -14,12 +14,29 @@ defmodule TinkoffInvestTest.ApiTest do
              } == Api.to_response(%HTTPoison.Response{status_code: 401, body: nil})
     end
 
-    test "Build request payload adds brokerAccountId query field" do
+    test "Build query request payload adds brokerAccountId query field" do
       path = "/orders"
       figi = "123"
       account_id = Application.fetch_env!(:tinkoff_invest, :broker_account_id)
       expected = path <> "?brokerAccountId=#{account_id}&figi=#{figi}"
       assert expected == Api.build_payload(path, %{figi: figi})
+    end
+
+    test "Build body request payload returns as string when body is map" do
+      figi = "123"
+      expected = Jason.encode!(%{figi: figi})
+      assert expected == Api.build_body_payload(%{figi: figi})
+    end
+
+    test "Build body request payload returns as string when body is nil" do
+      expected = ""
+      assert expected == Api.build_body_payload(nil)
+    end
+
+    test "Build body request payload returns as string when body is string" do
+      figi = "123"
+      expected = figi
+      assert expected == Api.build_body_payload(figi)
     end
 
     test "Parse datetime to iso string" do

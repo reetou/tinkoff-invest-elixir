@@ -10,8 +10,11 @@ defmodule TinkoffInvest.Api do
 
   ```
   TinkoffInvest.Api.request("/orders", :get, YourCustomModel)
-  TinkoffInvest.Api.request("/orders", :get, YourCustomModel, %{someParam: true}) # /orders?someParam=true
-  TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{})
+  TinkoffInvest.Api.request("/orders", :get, YourCustomModel, %{someQueryParam: true}) # /orders?someParam=true
+  TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{someQueryParam: true})
+  TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{someQueryParam: true}, %{bodyParam: true})
+
+  Please notice that `:post` request accepts both query and body payloads preferably as maps
   ```
   """
   alias TinkoffInvest.Api.Request
@@ -23,13 +26,13 @@ defmodule TinkoffInvest.Api do
   @doc """
   Allows you to send request to api if you need custom method that is not currently implemented
   """
-  @spec request(String.t(), method(), module(), map() | nil) :: Response.t()
-  def request(path, method, module, payload \\ nil)
-  def request(path, :get, module, payload), do: get(path, module, payload)
-  def request(path, :post, module, payload), do: post(path, module, payload)
+  @spec request(String.t(), method(), module(), map() | nil, map() | nil) :: Response.t()
+  def request(path, method, module, queryPayload \\ nil, body \\ %{})
+  def request(path, :get, module, queryPayload, _), do: get(path, module, queryPayload)
+  def request(path, :post, module, queryPayload, body), do: post(path, module, queryPayload, body)
 
   @doc """
-  Builds payload from map. Account id provided by default in config though can be overridden
+  Builds query payload from map. Account id provided by default in config though can be overridden
 
   Examples 
   ```
@@ -43,6 +46,18 @@ defmodule TinkoffInvest.Api do
   def build_payload(path, payload) do
     path
     |> build_query(payload)
+  end
+
+  @doc """
+  Build body payload and encodes it to JSON. 
+  """
+  @spec build_body_payload(map() | nil | String.t()) :: String.t()
+  def build_body_payload(nil), do: ""
+
+  def build_body_payload(payload) when is_binary(payload), do: payload
+
+  def build_body_payload(payload) when is_map(payload) do
+    Jason.encode!(payload)
   end
 
   def to_response(%HTTPoison.Response{status_code: status_code, body: nil}) do
@@ -64,10 +79,12 @@ defmodule TinkoffInvest.Api do
     |> handle_response(module)
   end
 
-  defp post(path, module, payload) do
+  defp post(path, module, payload, body) do
+    body = build_body_payload(body)
+
     path
     |> build_payload(payload)
-    |> Request.post("")
+    |> Request.post(body)
     |> handle_response(module)
   end
 

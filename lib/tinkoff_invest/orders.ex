@@ -17,6 +17,9 @@ defmodule TinkoffInvest.Orders do
   alias TinkoffInvest.Model
   alias TinkoffInvest.Model.Api.Response
 
+  @type order_operation() :: :buy | :sell
+  @order_operations [:buy, :sell]
+
   @doc """
   Returns active orders
   """
@@ -29,19 +32,26 @@ defmodule TinkoffInvest.Orders do
   @doc """
   Creates limit order by figi
   """
-  @spec create_limit_order(String.t()) :: Response.t()
-  def create_limit_order(figi) do
+  @spec create_limit_order(String.t(), integer(), order_operation(), float()) :: Response.t()
+  def create_limit_order(figi, lots, op, price) when op in @order_operations do
     "/orders/limit-order"
-    |> Api.request(:post, Model.LimitOrder, %{figi: figi})
+    |> Api.request(:post, Model.LimitOrder, %{figi: figi}, %{
+      lots: lots,
+      operation: operation(op),
+      price: price
+    })
   end
 
   @doc """
   Creates market order by figi
   """
-  @spec create_market_order(String.t()) :: Response.t()
-  def create_market_order(figi) do
+  @spec create_market_order(String.t(), integer(), order_operation()) :: Response.t()
+  def create_market_order(figi, lots, op) when op in @order_operations do
     "/orders/market-order"
-    |> Api.request(:post, Model.MarketOrder, %{figi: figi})
+    |> Api.request(:post, Model.MarketOrder, %{figi: figi}, %{
+      lots: lots,
+      operation: operation(op)
+    })
   end
 
   @doc """
@@ -52,4 +62,7 @@ defmodule TinkoffInvest.Orders do
     "/orders/cancel"
     |> Api.request(:post, Model.Empty, %{orderId: order_id})
   end
+
+  defp operation(:buy), do: "Buy"
+  defp operation(:sell), do: "Sell"
 end
