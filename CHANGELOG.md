@@ -1,5 +1,10 @@
 ## Changelog
 
+### 0.1.4
+
+- Fix getting positions
+- Add `ticker` field to position
+
 ### 0.1.3
 
 - Fix create market order payload
