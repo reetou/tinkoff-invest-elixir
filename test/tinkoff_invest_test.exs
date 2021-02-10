@@ -257,7 +257,7 @@ defmodule TinkoffInvestTest do
                   "positions" => [
                     %{
                       "figi" => "string",
-                      "ticker" => "string",
+                      "ticker" => "RUBUSTOM123",
                       "isin" => "string",
                       "instrumentType" => "Stock",
                       "balance" => 0,
@@ -299,6 +299,7 @@ defmodule TinkoffInvestTest do
             value: 0
           },
           figi: "string",
+          ticker: "RUBUSTOM123",
           instrument_type: "Stock",
           isin: "string",
           lots: 0,

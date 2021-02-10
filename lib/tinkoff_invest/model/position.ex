@@ -5,6 +5,7 @@ defmodule TinkoffInvest.Model.Position do
 
   typedstruct enforce: true do
     field(:figi, String.t())
+    field(:ticker, String.t())
     field(:isin, String.t())
     field(:instrument_type, String.t())
     field(:name, String.t())
@@ -18,19 +19,20 @@ defmodule TinkoffInvest.Model.Position do
 
   def new(%{"positions" => x}) when is_list(x), do: Enum.map(x, &new/1)
 
-  def new(%{
-        "figi" => figi,
-        "isin" => isin,
-        "instrumentType" => instrument_type,
-        "name" => name,
-        "balance" => balance,
-        "blocked" => blocked,
-        "lots" => lots,
-        "expectedYield" => expected_yield,
-        "averagePositionPrice" => average_position_price,
-        "averagePositionPriceNoNkd" => average_position_price_non_kd
-      }) do
+  def new(
+        %{
+          "ticker" => ticker,
+          "figi" => figi,
+          "isin" => isin,
+          "instrumentType" => instrument_type,
+          "name" => name,
+          "balance" => balance,
+          "blocked" => blocked,
+          "lots" => lots
+        } = params
+      ) do
     %__MODULE__{
+      ticker: ticker,
       figi: figi,
       isin: isin,
       instrument_type: instrument_type,
@@ -38,9 +40,17 @@ defmodule TinkoffInvest.Model.Position do
       balance: balance,
       blocked: blocked,
       lots: lots,
-      expected_yield: ExpectedYield.new(expected_yield),
-      average_position_price: AveragePositionPrice.new(average_position_price),
-      average_position_price_non_kd: AveragePositionPrice.new(average_position_price_non_kd)
+      expected_yield: optional(params, "expectedYield", ExpectedYield),
+      average_position_price: optional(params, "averagePositionPrice", AveragePositionPrice),
+      average_position_price_non_kd:
+        optional(params, "averagePositionPriceNoNkd", AveragePositionPrice)
     }
+  end
+
+  defp optional(params, key, model) do
+    case Map.get(params, key) do
+      nil -> nil
+      value -> model.new(value)
+    end
   end
 end
