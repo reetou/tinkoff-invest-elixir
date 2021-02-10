@@ -188,33 +188,27 @@ defmodule TinkoffInvestTest do
     end
 
     @response Response.new(%{
-                "trackingId" => "1234",
-                "status" => "Ok",
                 "payload" => %{
-                  "orderId" => "string",
-                  "operation" => "Sell",
-                  "status" => "New",
-                  "rejectReason" => "string",
-                  "message" => "string",
-                  "requestedLots" => 0,
-                  "executedLots" => 0,
-                  "commission" => %{
-                    "currency" => "RUB",
-                    "value" => 2
-                  }
+                  "executedLots" => 5,
+                  "operation" => "Buy",
+                  "orderId" => "123",
+                  "requestedLots" => 5,
+                  "status" => "Fill"
                 },
+                "status" => "Ok",
+                "trackingId" => "1234",
                 "status_code" => 200
               })
     @expected %Response{
       payload: %Model.MarketOrder{
-        commission: %{"currency" => "RUB", "value" => 2},
-        executed_lots: 0,
-        message: "string",
-        operation: "Sell",
-        order_id: "string",
-        reject_reason: "string",
-        requested_lots: 0,
-        status: "New"
+        commission: nil,
+        executed_lots: 5,
+        message: nil,
+        operation: "Buy",
+        order_id: "123",
+        reject_reason: nil,
+        requested_lots: 5,
+        status: "Fill"
       },
       tracking_id: "1234",
       status: "Ok",

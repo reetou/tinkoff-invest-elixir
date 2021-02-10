@@ -102,7 +102,7 @@ defmodule TinkoffInvest.Api do
     |> Response.payload(data)
   end
 
-  defp build_query(path, nil), do: path
+  defp build_query(path, nil), do: build_query(path, %{})
 
   defp build_query(path, payload) do
     payload

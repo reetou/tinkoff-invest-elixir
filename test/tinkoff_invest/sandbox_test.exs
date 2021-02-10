@@ -49,18 +49,11 @@ defmodule TinkoffInvestTest.SandboxTest do
     @response Response.new(%{
                 "trackingId" => "1234",
                 "status" => "Ok",
-                "payload" => %{
-                  "currency" => "USD",
-                  "balance" => 355.55
-                },
+                "payload" => %{},
                 "status_code" => 200
               })
     @expected %Response{
-      payload:
-        Model.Currency.Balance.new(%{
-          "currency" => "USD",
-          "balance" => 355.55
-        }),
+      payload: Model.Empty.new(%{}),
       tracking_id: "1234",
       status: "Ok",
       status_code: 200
@@ -72,18 +65,11 @@ defmodule TinkoffInvestTest.SandboxTest do
     @response Response.new(%{
                 "trackingId" => "1234",
                 "status" => "Ok",
-                "payload" => %{
-                  "figi" => "AAPL",
-                  "balance" => 355.55
-                },
+                "payload" => %{},
                 "status_code" => 200
               })
     @expected %Response{
-      payload:
-        Model.Position.Balance.new(%{
-          "figi" => "AAPL",
-          "balance" => 355.55
-        }),
+      payload: Model.Empty.new(%{}),
       tracking_id: "1234",
       status: "Ok",
       status_code: 200
