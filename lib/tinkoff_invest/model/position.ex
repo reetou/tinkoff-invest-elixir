@@ -23,7 +23,6 @@ defmodule TinkoffInvest.Model.Position do
         %{
           "ticker" => ticker,
           "figi" => figi,
-          "isin" => isin,
           "instrumentType" => instrument_type,
           "name" => name,
           "balance" => balance,
@@ -34,7 +33,7 @@ defmodule TinkoffInvest.Model.Position do
     %__MODULE__{
       ticker: ticker,
       figi: figi,
-      isin: isin,
+      isin: Map.get(params, "isin"),
       instrument_type: instrument_type,
       name: name,
       balance: balance,

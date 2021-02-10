@@ -256,6 +256,15 @@ defmodule TinkoffInvestTest do
                 "payload" => %{
                   "positions" => [
                     %{
+                      "balance" => 1,
+                      "blocked" => 0,
+                      "figi" => "BBG0013HJJ31",
+                      "instrumentType" => "Currency",
+                      "lots" => 0,
+                      "name" => "Евро",
+                      "ticker" => "EUR_RUB__TOM"
+                    },
+                    %{
                       "figi" => "string",
                       "ticker" => "RUBUSTOM123",
                       "isin" => "string",
@@ -283,6 +292,19 @@ defmodule TinkoffInvestTest do
               })
     @expected %Response{
       payload: [
+        %Model.Position{
+          average_position_price: nil,
+          average_position_price_non_kd: nil,
+          expected_yield: nil,
+          isin: nil,
+          balance: 1,
+          blocked: 0,
+          figi: "BBG0013HJJ31",
+          instrument_type: "Currency",
+          lots: 0,
+          name: "Евро",
+          ticker: "EUR_RUB__TOM"
+        },
         %Model.Position{
           average_position_price: %Model.Position.AveragePositionPrice{
             currency: "RUB",
