@@ -1,5 +1,10 @@
 ## Changelog
 
+### 0.1.3
+
+- Fix create market order payload
+- Fix set currency and position balance
+
 ### 0.1.2
 
 - Fix create limit and market orders
