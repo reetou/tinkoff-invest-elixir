@@ -22,6 +22,7 @@ defmodule TinkoffInvestTest do
     end
 
     test "Should change mode and endpoint url successfully" do
+      :ok = TinkoffInvest.set_mode(:production)
       assert :production = TinkoffInvest.mode()
       assert TinkoffInvest.endpoint() == TinkoffInvest.default_endpoint()
       assert :ok = TinkoffInvest.set_mode(:sandbox)
@@ -154,30 +155,24 @@ defmodule TinkoffInvestTest do
                 "trackingId" => "1234",
                 "status" => "Ok",
                 "payload" => %{
-                  "orderId" => "string",
-                  "operation" => "Buy",
-                  "status" => "New",
-                  "rejectReason" => "string",
-                  "message" => "string",
-                  "requestedLots" => 0,
                   "executedLots" => 2,
-                  "commission" => %{
-                    "currency" => "RUB",
-                    "value" => 1
-                  }
+                  "operation" => "Sell",
+                  "orderId" => "12345",
+                  "requestedLots" => 2,
+                  "status" => "Fill"
                 },
                 "status_code" => 200
               })
     @expected %Response{
       payload: %Model.LimitOrder{
-        commission: %{"currency" => "RUB", "value" => 1},
+        commission: nil,
         executed_lots: 2,
-        message: "string",
-        operation: "Buy",
-        order_id: "string",
-        reject_reason: "string",
-        requested_lots: 0,
-        status: "New"
+        message: nil,
+        operation: "Sell",
+        order_id: "12345",
+        reject_reason: nil,
+        requested_lots: 2,
+        status: "Fill"
       },
       tracking_id: "1234",
       status: "Ok",
