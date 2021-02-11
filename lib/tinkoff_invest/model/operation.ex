@@ -22,27 +22,26 @@ defmodule TinkoffInvest.Model.Operation do
 
   def new(%{"operations" => x}) when is_list(x), do: Enum.map(x, &new/1)
 
-  def new(%{
-        "id" => id,
-        "status" => status,
-        "trades" => trades,
-        "commission" => commission,
-        "currency" => currency,
-        "figi" => figi,
-        "instrumentType" => instrument_type,
-        "isMarginCall" => is_margin_call,
-        "date" => date,
-        "operationType" => operation_type,
-        "payment" => payment,
-        "price" => price,
-        "quantity" => quantity,
-        "quantityExecuted" => quantity_executed
-      }) do
+  def new(
+        %{
+          "id" => id,
+          "status" => status,
+          "currency" => currency,
+          "figi" => figi,
+          "instrumentType" => instrument_type,
+          "isMarginCall" => is_margin_call,
+          "date" => date,
+          "operationType" => operation_type,
+          "payment" => payment,
+          "price" => price,
+          "quantity" => quantity
+        } = params
+      ) do
     %__MODULE__{
       id: id,
       status: status,
-      trades: Trade.new(trades),
-      commission: Commission.new(commission),
+      trades: optional(params, "trades", Trade),
+      commission: optional(params, "commission", Commission),
       currency: currency,
       figi: figi,
       instrument_type: instrument_type,
@@ -52,7 +51,14 @@ defmodule TinkoffInvest.Model.Operation do
       payment: payment,
       price: price,
       quantity: quantity,
-      quantity_executed: quantity_executed
+      quantity_executed: Map.get(params, "quantityExecuted")
     }
+  end
+
+  defp optional(params, key, model) do
+    case Map.get(params, key) do
+      nil -> nil
+      value -> model.new(value)
+    end
   end
 end
