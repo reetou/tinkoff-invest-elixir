@@ -10,8 +10,14 @@ defmodule TinkoffInvestTest.ApiTest do
                tracking_id: nil,
                status: nil,
                status_code: 401,
-               payload: %{"code" => nil, "message" => nil}
-             } == Api.to_response(%HTTPoison.Response{status_code: 401, body: nil})
+               payload: %{"code" => nil, "message" => nil},
+               request_url: "123"
+             } ==
+               Api.to_response(%HTTPoison.Response{
+                 status_code: 401,
+                 body: nil,
+                 request: %HTTPoison.Request{url: "123"}
+               })
     end
 
     test "Build query request payload adds brokerAccountId query field" do

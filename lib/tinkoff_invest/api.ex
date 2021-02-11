@@ -14,8 +14,9 @@ defmodule TinkoffInvest.Api do
   TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{someQueryParam: true})
   TinkoffInvest.Api.request("/orders", :post, YourCustomModel, %{someQueryParam: true}, %{bodyParam: true})
 
-  Please notice that `:post` request accepts both query and body payloads preferably as maps
   ```
+
+  Please notice that `:post` request accepts both query and body payloads preferably as maps
   """
   alias TinkoffInvest.Api.Request
   alias TinkoffInvest.Model.Api.Response
@@ -60,16 +61,34 @@ defmodule TinkoffInvest.Api do
     Jason.encode!(payload)
   end
 
-  def to_response(%HTTPoison.Response{status_code: status_code, body: nil}) do
+  def to_response(%HTTPoison.Response{body: body, status_code: status_code} = r)
+      when is_binary(body) and status_code not in [200] do
+    r
+    |> Map.put(:body, %{"payload" => %{"code" => nil, "message" => body}})
+    |> to_response()
+  end
+
+  def to_response(%HTTPoison.Response{body: nil} = r) do
     %{
-      "status_code" => status_code,
       "payload" => %{"code" => nil, "message" => nil}
     }
+    |> response_metadata(r)
     |> Response.new()
   end
 
-  def to_response(%HTTPoison.Response{status_code: status_code, body: body}) do
-    Response.new(Map.put(body, "status_code", status_code))
+  def to_response(%HTTPoison.Response{body: body} = r) do
+    body
+    |> response_metadata(r)
+    |> Response.new()
+  end
+
+  defp response_metadata(data, %HTTPoison.Response{
+         status_code: code,
+         request: %HTTPoison.Request{url: url}
+       }) do
+    data
+    |> Map.put("status_code", code)
+    |> Map.put("request_url", url)
   end
 
   defp get(path, module, payload) do
