@@ -1,5 +1,14 @@
 ## Changelog
 
+### 0.1.5
+
+- Fix set positions balance
+- Fix operations history
+- Fix create limit order payload
+- Add request url to response struct
+- Handle 404 errors from API
+- Add test suites for API without mocks
+
 ### 0.1.4
 
 - Fix getting positions
