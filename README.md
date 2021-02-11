@@ -4,11 +4,11 @@
 
 TinkoffInvest SDK Elixir programming language.
 
-Клиент для REST API Тинькофф.Инвестиции на Elixir.
+REST клиент для Тинькофф.Инвестиций на Elixir.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
+The package can be installed
 by adding `tinkoff_invest` to your list of dependencies in `mix.exs`:
 
 ```elixir
