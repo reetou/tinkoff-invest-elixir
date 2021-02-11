@@ -58,7 +58,7 @@ defmodule TinkoffInvest.Sandbox do
   """
   @spec set_position_balance(String.t(), float()) :: Response.t()
   def set_position_balance(figi, balance) do
-    "/sandbox/currencies/balance"
+    "/sandbox/positions/balance"
     |> Api.request(:post, Model.Empty, nil, %{figi: figi, balance: balance})
   end
 end
