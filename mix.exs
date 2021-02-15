@@ -7,7 +7,7 @@ defmodule TinkoffInvest.MixProject do
   def project do
     [
       app: :tinkoff_invest,
-      version: "0.1.5",
+      version: "0.2.0",
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -33,7 +33,8 @@ defmodule TinkoffInvest.MixProject do
             TinkoffInvest.Portfolio,
             TinkoffInvest.Sandbox,
             TinkoffInvest.User,
-            TinkoffInvest.Api
+            TinkoffInvest.Api,
+            TinkoffInvest.HistoricalData
           ]
         ]
       ]
@@ -55,6 +56,7 @@ defmodule TinkoffInvest.MixProject do
     [
       {:httpoison, "~> 1.8"},
       {:jason, "~> 1.2"},
+      {:timex, "~> 3.0"},
       {:typed_struct, "~> 0.2.1", runtime: false},
       {:ex_doc, "~> 0.23", only: :dev, runtime: false},
       {:mock, "~> 0.3.0", only: :test}

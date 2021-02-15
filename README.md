@@ -14,7 +14,7 @@ by adding `tinkoff_invest` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:tinkoff_invest, "~> 0.1"}
+    {:tinkoff_invest, "~> 0.2"}
   ]
 end
 ```

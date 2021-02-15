@@ -9,6 +9,7 @@ See these modules
 - `TinkoffInvest.Portfolio`
 - `TinkoffInvest.Sandbox`
 - `TinkoffInvest.Market`
+- `TinkoffInvest.HistoricalData`
 
 If you have needs beyond defined methods you can use API directly:
 
