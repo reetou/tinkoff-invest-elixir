@@ -94,9 +94,8 @@ defmodule TinkoffInvest.HistoricalData do
   defp do_candles(figi, from, to, interval) do
     figi
     |> Market.candles(from, to, interval)
-    |> TinkoffInvest.payload()
     |> case do
-      x when is_list(x) -> x
+      %{payload: x} when is_list(x) -> x
       e -> raise "Api error: #{inspect(e)}"
     end
   end
