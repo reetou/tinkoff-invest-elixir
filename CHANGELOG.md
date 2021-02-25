@@ -1,6 +1,10 @@
 ## Changelog
 
 
+### 0.2.1
+
+- Change historical data api error message - now shows status code too
+
 ### 0.2.0
 
 - Add historical data
