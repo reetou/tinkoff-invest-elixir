@@ -4,7 +4,7 @@ defmodule TinkoffInvestTest do
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Model
   import Mock
-  import TinkoffInvest.TestMocks
+  import TinkoffInvestTest.TestMocks
 
   describe "Configuration" do
     test "Should change token successfully" do

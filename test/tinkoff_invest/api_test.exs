@@ -1,7 +1,7 @@
 defmodule TinkoffInvestTest.ApiTest do
   use ExUnit.Case
-  doctest TinkoffInvest
   alias TinkoffInvest.Api
+  doctest TinkoffInvest.Api
   alias TinkoffInvest.Model.Api.Response
 
   describe "Api" do

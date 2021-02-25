@@ -36,12 +36,16 @@ defmodule TinkoffInvest.Api do
   Builds query payload from map. Account id provided by default in config though can be overridden
 
   Examples 
-  ```
-  # Overwrites default value in config
-  TinkoffInvest.Api.build_payload("/orders", %{brokerAccountId: "MyCustomId"})
-  # Adds brokerAccountId field with broker_account_id from config to payload
-  TinkoffInvest.Api.build_payload("/orders", %{figi: "AAPL"})
-  ```
+
+      iex>TinkoffInvest.change_account_id("123")
+      :ok
+      iex>TinkoffInvest.Api.build_payload("/orders", %{myQueryParam: true, someOtherParam: 2})
+      "/orders?brokerAccountId=123&myQueryParam=true&someOtherParam=2"
+
+  You can override broker account id:    
+
+      iex>TinkoffInvest.Api.build_payload("/orders", %{brokerAccountId: "SB1111", myQueryParam: true, someOtherParam: 2})
+      "/orders?brokerAccountId=SB1111&myQueryParam=true&someOtherParam=2"
   """
   @spec build_payload(String.t(), map() | nil) :: String.t()
   def build_payload(path, payload) do
@@ -50,7 +54,17 @@ defmodule TinkoffInvest.Api do
   end
 
   @doc """
-  Build body payload and encodes it to JSON. 
+  Build body payload and encodes it to JSON if needed. 
+
+      iex>TinkoffInvest.Api.build_body_payload(nil)
+      ""
+
+      iex>TinkoffInvest.Api.build_body_payload("[123]")
+      "[123]"
+
+      iex>TinkoffInvest.Api.build_body_payload(%{myField: true})
+      "{\\"myField\\":true}"
+
   """
   @spec build_body_payload(map() | nil | String.t()) :: String.t()
   def build_body_payload(nil), do: ""
@@ -61,6 +75,20 @@ defmodule TinkoffInvest.Api do
     Jason.encode!(payload)
   end
 
+  @doc """
+
+  Transforms body response and encodes it to `TinkoffInvest.Model.Api.Response` 
+
+      iex>TinkoffInvest.Api.to_response(%HTTPoison.Response{body: "SOME_ERROR", status_code: 404, request: %HTTPoison.Request{url: "/orders"}})
+      %TinkoffInvest.Model.Api.Response{payload: %{"code" => nil, "message" => "SOME_ERROR"}, request_url: "/orders", status: nil, status_code: 404, tracking_id: nil}
+
+      iex>TinkoffInvest.Api.to_response(%HTTPoison.Response{body: nil, status_code: 404, request: %HTTPoison.Request{url: "/orders"}})
+      %TinkoffInvest.Model.Api.Response{payload: %{"code" => nil, "message" => nil}, request_url: "/orders", status: nil, status_code: 404, tracking_id: nil}
+
+      iex>TinkoffInvest.Api.to_response(%HTTPoison.Response{body: %{"payload" => %{"code" => "SOME_ERR", "message" => "Well, error"}}, status_code: 404, request: %HTTPoison.Request{url: "/orders"}})
+      %TinkoffInvest.Model.Api.Response{payload: %{"code" => "SOME_ERR", "message" => "Well, error"}, request_url: "/orders", status: nil, status_code: 404, tracking_id: nil}
+
+  """
   def to_response(%HTTPoison.Response{body: body, status_code: status_code} = r)
       when is_binary(body) and status_code not in [200] do
     r

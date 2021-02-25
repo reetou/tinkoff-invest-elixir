@@ -1,4 +1,4 @@
-defmodule TinkoffInvest.TestMocks do
+defmodule TinkoffInvestTest.TestMocks do
   alias TinkoffInvest.Api.Request
 
   defmacro http_mock(name, test) do

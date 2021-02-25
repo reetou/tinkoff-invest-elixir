@@ -1,11 +1,10 @@
 defmodule TinkoffInvestTest.SandboxTest do
   use ExUnit.Case
-  doctest TinkoffInvest
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Model
   alias TinkoffInvest.Sandbox
   import Mock
-  import TinkoffInvest.TestMocks
+  import TinkoffInvestTest.TestMocks
 
   describe "Sandbox" do
     @response Response.new(%{

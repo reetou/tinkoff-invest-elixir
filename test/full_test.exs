@@ -1,6 +1,5 @@
 defmodule TinkoffInvestTest.FullTest do
   use ExUnit.Case, async: false
-  doctest TinkoffInvest
   alias TinkoffInvest
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Orders

@@ -1,11 +1,10 @@
 defmodule TinkoffInvestTest.MarketTest do
   use ExUnit.Case
-  doctest TinkoffInvest
   alias TinkoffInvest.Model.Api.Response
   alias TinkoffInvest.Model
   alias TinkoffInvest.Market
   import Mock
-  import TinkoffInvest.TestMocks
+  import TinkoffInvestTest.TestMocks
 
   describe "Market" do
     @response Response.new(%{
